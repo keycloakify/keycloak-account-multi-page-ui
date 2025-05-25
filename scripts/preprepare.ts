@@ -1,5 +1,5 @@
 import { downloadAndExtractArchive } from "../node_modules/keycloakify/src/bin/tools/downloadAndExtractArchive";
-import { getThisCodebaseRootDirPath } from "./tools/getThisCodebaseRootDirPath";
+import { getThisCodebaseRootDirPath } from "./tools/getThisCodebaseRootDirPath.overridable";
 import { getProxyFetchOptions } from "../node_modules/keycloakify/src/bin/tools/fetchProxyOptions";
 import { transformCodebase } from "../node_modules/keycloakify/src/bin/tools/transformCodebase";
 import { join as pathJoin } from "path";
@@ -54,7 +54,7 @@ import { join as pathJoin } from "path";
         srcDirPath: pathJoin(extractedDirPath, "scripts"),
         destDirPath: pathJoin(getThisCodebaseRootDirPath(), "scripts"),
         transformSourceCode: ({ fileRelativePath, sourceCode }) => {
-            if (fileRelativePath.endsWith(".login.ts")) {
+            if (fileRelativePath.endsWith(".overridable.ts")) {
                 return undefined;
             }
 
