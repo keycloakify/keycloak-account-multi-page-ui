@@ -44,6 +44,8 @@ jspm_packages
 /dist
 
 /scripts/*
+
+!/scripts/*.overridable.ts
 !/scripts/preprepare.ts
 
 !/scripts/prepare/

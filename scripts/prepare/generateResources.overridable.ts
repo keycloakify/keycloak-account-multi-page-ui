@@ -1,1 +1,1 @@
-export const THEME_NAME = "login";
+export const THEME_NAME = "account";
