@@ -3,7 +3,7 @@ import * as fs from "fs";
 import { join as pathJoin } from "path";
 import { downloadKeycloakDefaultTheme } from "../shared/downloadKeycloakDefaultTheme";
 import { WELL_KNOWN_DIRECTORY_BASE_NAME } from "keycloakify/src/bin/shared/constants";
-import { getThisCodebaseRootDirPath } from "keycloakify/src/bin/tools/getThisCodebaseRootDirPath";
+import { getThisCodebaseRootDirPath } from "../tools/getThisCodebaseRootDirPath.overridable";
 import { supportedLanguages } from "./generateI18nMessages.overridable";
 import * as fsPr from "fs/promises";
 
