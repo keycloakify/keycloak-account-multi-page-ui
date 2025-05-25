@@ -2,7 +2,7 @@ import { downloadAndExtractArchive } from "../node_modules/keycloakify/src/bin/t
 import { getThisCodebaseRootDirPath } from "./tools/getThisCodebaseRootDirPath.overridable";
 import { getProxyFetchOptions } from "../node_modules/keycloakify/src/bin/tools/fetchProxyOptions";
 import { transformCodebase } from "../node_modules/keycloakify/src/bin/tools/transformCodebase";
-import { join as pathJoin } from "path";
+import { join as pathJoin, sep as pathSep } from "path";
 
 (async () => {
     const { extractedDirPath } = await downloadAndExtractArchive({
@@ -11,10 +11,12 @@ import { join as pathJoin } from "path";
         fetchOptions: getProxyFetchOptions({
             npmConfigGetCwd: getThisCodebaseRootDirPath()
         }),
-        uniqueIdOfOnArchiveFile: "extract all",
+        uniqueIdOfOnArchiveFile: "extract_all",
         onArchiveFile: async params => {
             const { fileRelativePath, writeFile } = params;
-            await writeFile({ fileRelativePath });
+            await writeFile({
+                fileRelativePath: fileRelativePath.split(pathSep).splice(1).join(pathSep)
+            });
         }
     });
 
