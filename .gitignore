@@ -67,3 +67,14 @@ jspm_packages
 /src/core/*
 !/src/core/kcClsx.ts
 
+!/src/core/i18n/
+/src/core/i18n/*
+!/src/core/i18n/messages_defaultSet/
+
+!/src/core/KcContext/
+/src/core/KcContext/*
+!/src/core/KcContext/KcContext.ts
+!/src/core/KcContext/kcContextMocks.ts
+
+
+
