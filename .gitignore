@@ -76,5 +76,9 @@ jspm_packages
 !/src/core/KcContext/KcContext.ts
 !/src/core/KcContext/kcContextMocks.ts
 
+!/src/KcContext/
+/src/KcContext/*
+!/src/KcContext/index.ts
+
 
 

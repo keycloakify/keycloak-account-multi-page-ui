@@ -1,8 +1,7 @@
-import type { ThemeType, LoginThemePageId } from "keycloakify/bin/shared/constants";
+import type { ThemeType, AccountThemePageId } from "keycloakify/bin/shared/constants";
 import type { ValueOf } from "keycloakify/tools/ValueOf";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
-import type { ClassKey } from "../kcClsx";
 
 export type ExtendKcContext<
     KcContextExtension extends { properties?: Record<string, string | undefined> },
@@ -21,72 +20,21 @@ export type ExtendKcContext<
               KcContextExtensionPerPage[PageId];
 }>;
 
-/** Take theses type definition with a grain of salt.
- * Some values might be undefined on some pages.
- * (ex: url.loginAction is undefined on error.ftl)
- */
 export type KcContext =
-    | KcContext.Login
-    | KcContext.Register
-    | KcContext.Info
-    | KcContext.Error
-    | KcContext.LoginResetPassword
-    | KcContext.LoginVerifyEmail
-    | KcContext.Terms
-    | KcContext.LoginOauth2DeviceVerifyUserCode
-    | KcContext.LoginOauthGrant
-    | KcContext.LoginOtp
-    | KcContext.LoginUsername
-    | KcContext.WebauthnAuthenticate
-    | KcContext.WebauthnRegister
-    | KcContext.LoginPassword
-    | KcContext.LoginUpdatePassword
-    | KcContext.LoginUpdateProfile
-    | KcContext.LoginIdpLinkConfirm
-    | KcContext.LoginIdpLinkEmail
-    | KcContext.LoginPageExpired
-    | KcContext.LoginConfigTotp
-    | KcContext.LogoutConfirm
-    | KcContext.IdpReviewUserProfile
-    | KcContext.UpdateEmail
-    | KcContext.SelectAuthenticator
-    | KcContext.SamlPostForm
-    | KcContext.DeleteCredential
-    | KcContext.Code
-    | KcContext.DeleteAccountConfirm
-    | KcContext.FrontchannelLogout
-    | KcContext.LoginRecoveryAuthnCodeConfig
-    | KcContext.LoginRecoveryAuthnCodeInput
-    | KcContext.LoginResetOtp
-    | KcContext.LoginX509Info
-    | KcContext.WebauthnError
-    | KcContext.LoginPasskeysConditionalAuthenticate
-    | KcContext.LoginIdpLinkConfirmOverride;
-
-assert<KcContext["themeType"] extends ThemeType ? true : false>();
+    | KcContext.Password
+    | KcContext.Account
+    | KcContext.Sessions
+    | KcContext.Totp
+    | KcContext.Applications
+    | KcContext.Log
+    | KcContext.FederatedIdentity;
 
 export declare namespace KcContext {
     export type Common = {
         themeVersion: string;
         keycloakifyVersion: string;
-        themeType: "login";
+        themeType: "account";
         themeName: string;
-        url: {
-            loginAction: string;
-            resourcesPath: string;
-            resourcesCommonPath: string;
-            loginRestartFlowUrl: string;
-            loginUrl: string;
-            ssoLoginInOtherTabsUrl: string;
-        };
-        realm: {
-            name: string;
-            displayName: string;
-            displayNameHtml: string;
-            internationalizationEnabled: boolean;
-            registrationEmailAsUsername: boolean;
-        };
-        /** Undefined if !realm.internationalizationEnabled */
         locale?: {
             supported: {
                 url: string;
@@ -94,26 +42,42 @@ export declare namespace KcContext {
                 languageTag: string;
             }[];
             currentLanguageTag: string;
-            rtl?: boolean;
         };
-        auth?: {
-            showUsername?: boolean;
-            showResetCredentials?: boolean;
-            showTryAnotherWayLink?: boolean;
-            attemptedUsername?: string;
+        url: {
+            accountUrl: string;
+            passwordUrl: string;
+            totpUrl: string;
+            socialUrl: string;
+            sessionsUrl: string;
+            applicationsUrl: string;
+            logUrl: string;
+            logoutUrl: string;
+            resourceUrl: string;
+            resourcesCommonPath: string;
+            resourcesPath: string;
+            /** @deprecated, not present in recent keycloak version apparently, use kcContext.referrer instead */
+            referrerURI?: string;
+            getLogoutUrl: () => string;
         };
-        scripts?: string[];
+        features: {
+            passwordUpdateSupported: boolean;
+            identityFederation: boolean;
+            log: boolean;
+            authorization: boolean;
+        };
+        realm: {
+            internationalizationEnabled: boolean;
+            userManagedAccessAllowed: boolean;
+        };
+        // Present only if redirected to account page with ?referrer=xxx&referrer_uri=http...
         message?: {
             type: "success" | "warning" | "error" | "info";
             summary: string;
         };
-        client: {
-            clientId: string;
-            name?: string;
-            description?: string;
-            attributes: Record<string, string>;
+        referrer?: {
+            url: string; // The url of the App
+            name: string; // Client id
         };
-        isAppInitiatedAction?: boolean;
         messagesPerField: {
             /**
              * Return text if message for given field exists. Useful eg. to add css styles for fields with message.
@@ -129,7 +93,7 @@ export declare namespace KcContext {
              * @param fields
              * @return boolean
              */
-            existsError: (fieldName: string, ...otherFiledNames: string[]) => boolean;
+            existsError: (fieldName: string) => boolean;
             /**
              * Get message for given field.
              *
@@ -144,8 +108,12 @@ export declare namespace KcContext {
              * @return boolean
              */
             exists: (fieldName: string) => boolean;
-
-            getFirstError: (...fieldNames: string[]) => string;
+        };
+        account: {
+            email?: string;
+            firstName: string;
+            lastName?: string;
+            username?: string;
         };
         properties: {};
         "x-keycloakify": {
@@ -153,277 +121,45 @@ export declare namespace KcContext {
         };
     };
 
-    export type SamlPostForm = Common & {
-        pageId: "saml-post-form.ftl";
-        samlPost: {
-            url: string;
-            SAMLRequest?: string;
-            SAMLResponse?: string;
-            relayState?: string;
+    export type Password = Common & {
+        pageId: "password.ftl";
+        password: {
+            passwordSet: boolean;
         };
+        stateChecker: string;
     };
 
-    export type Login = Common & {
-        pageId: "login.ftl";
+    export type Account = Common & {
+        pageId: "account.ftl";
         url: {
-            loginResetCredentialsUrl: string;
-            registrationUrl: string;
+            accountUrl: string;
         };
         realm: {
-            loginWithEmailAllowed: boolean;
-            rememberMe: boolean;
-            password: boolean;
-            resetPasswordAllowed: boolean;
-            registrationAllowed: boolean;
+            registrationEmailAsUsername: boolean;
+            editUsernameAllowed: boolean;
         };
-        auth: {
-            selectedCredential?: string;
-        };
-        registrationDisabled: boolean;
-        login: {
-            username?: string;
-            rememberMe?: string; // "on" | undefined
-            password?: string;
-        };
-        usernameHidden?: boolean;
-        social?: {
-            displayInfo: boolean;
-            providers?: {
-                loginUrl: string;
-                alias: string;
-                providerId: string;
-                displayName: string;
-                iconClasses?: string;
-            }[];
-        };
+        stateChecker: string;
     };
 
-    export type Register = Common & {
-        pageId: "register.ftl";
-        profile: UserProfile;
-        passwordPolicies?: PasswordPolicies;
-        url: {
-            registrationAction: string;
-        };
-        passwordRequired: boolean;
-        recaptchaRequired?: boolean;
-        recaptchaVisible?: boolean;
-        recaptchaSiteKey?: string;
-        recaptchaAction?: string;
-        termsAcceptanceRequired?: boolean;
-        messageHeader?: string;
-        social?: Login["social"];
-    };
-
-    export type Info = Common & {
-        pageId: "info.ftl";
-        messageHeader?: string;
-        requiredActions?: string[];
-        skipLink: boolean;
-        pageRedirectUri?: string;
-        actionUri?: string;
-        client: {
-            baseUrl?: string;
-        };
-        message: NonNullable<Common["message"]>;
-    };
-
-    export type Error = Common & {
-        pageId: "error.ftl";
-        client?: {
-            baseUrl?: string;
-        };
-        message: NonNullable<Common["message"]>;
-        skipLink?: boolean;
-    };
-
-    export type LoginResetPassword = Common & {
-        pageId: "login-reset-password.ftl";
-        realm: {
-            loginWithEmailAllowed: boolean;
-            duplicateEmailsAllowed: boolean;
-        };
-        url: {
-            loginResetCredentialsUrl: string;
-        };
-        auth: {
-            attemptedUsername?: string;
-        };
-    };
-
-    export type LoginVerifyEmail = Common & {
-        pageId: "login-verify-email.ftl";
-        //NOTE: Optional because maybe it wasn't defined in older keycloak versions.
-        user?: {
-            email: string;
-        };
-    };
-
-    export type Terms = Common & {
-        pageId: "terms.ftl";
-        //NOTE: Optional because maybe it wasn't defined in older keycloak versions.
-        user?: {
-            id: string;
-            username: string;
-            attributes: Record<string, string[]>;
-            email: string;
-            emailVerified: boolean;
-            firstName?: string;
-            lastName?: string;
-            markedForEviction?: boolean;
-        };
-        __localizationRealmOverridesTermsText?: string;
-    };
-
-    export type LoginOauth2DeviceVerifyUserCode = Common & {
-        pageId: "login-oauth2-device-verify-user-code.ftl";
-        url: {
-            oauth2DeviceVerificationAction: string;
-        };
-    };
-
-    export type LoginOauthGrant = Common & {
-        pageId: "login-oauth-grant.ftl";
-        oauth: {
-            code: string;
-            client: string;
-            clientScopesRequested: {
-                consentScreenText: string;
-                dynamicScopeParameter?: string;
-            }[];
-        };
-        url: {
-            oauthAction: string;
-        };
-    };
-
-    export type LoginOtp = Common & {
-        pageId: "login-otp.ftl";
-        otpLogin: {
-            userOtpCredentials: {
+    export type Sessions = Common & {
+        pageId: "sessions.ftl";
+        sessions: {
+            sessions: {
+                expires: string;
+                clients: string[];
+                ipAddress: string;
+                started: string;
+                lastAccess: string;
                 id: string;
-                userLabel: string;
             }[];
-            selectedCredentialId?: string;
         };
+        stateChecker: string;
     };
 
-    export type LoginUsername = Common & {
-        pageId: "login-username.ftl";
-        url: {
-            loginResetCredentialsUrl: string;
-            registrationUrl: string;
-        };
-        realm: {
-            loginWithEmailAllowed: boolean;
-            rememberMe: boolean;
-            password: boolean;
-            resetPasswordAllowed: boolean;
-            registrationAllowed: boolean;
-        };
-        registrationDisabled: boolean;
-        login: {
-            username?: string;
-            rememberMe?: string;
-        };
-        usernameHidden?: boolean;
-        social?: Login["social"];
-    };
-
-    export type LoginPassword = Common & {
-        pageId: "login-password.ftl";
-        url: {
-            loginResetCredentialsUrl: string;
-            registrationUrl: string;
-        };
-        realm: {
-            resetPasswordAllowed: boolean;
-        };
-        auth?: {
-            showUsername?: boolean;
-            showResetCredentials?: boolean;
-            showTryAnotherWayLink?: boolean;
-            attemptedUsername?: string;
-        };
-    };
-
-    export type WebauthnAuthenticate = Common & {
-        pageId: "webauthn-authenticate.ftl";
-        authenticators: {
-            authenticators: WebauthnAuthenticate.WebauthnAuthenticator[];
-        };
-        challenge: string;
-        // I hate this:
-        userVerification: UserVerificationRequirement | "not specified";
-        rpId: string;
-        createTimeout: string | number;
-        isUserIdentified: "true" | "false";
-        shouldDisplayAuthenticators: boolean;
-        realm: {
-            password: boolean;
-            registrationAllowed: boolean;
-        };
-        registrationDisabled?: boolean;
-        url: {
-            registrationUrl?: string;
-        };
-    };
-
-    export namespace WebauthnAuthenticate {
-        export type WebauthnAuthenticator = {
-            credentialId: string;
-            transports: {
-                iconClass: string;
-                displayNameProperties?: string[];
-            };
-            label: string;
-            createdAt: string;
-        };
-    }
-
-    export type WebauthnRegister = Common & {
-        pageId: "webauthn-register.ftl";
-        challenge: string;
-        userid: string;
-        username: string;
-        signatureAlgorithms: string[];
-        rpEntityName: string;
-        rpId: string;
-        attestationConveyancePreference: string;
-        authenticatorAttachment: string;
-        requireResidentKey: string;
-        userVerificationRequirement: string;
-        createTimeout: number | string;
-        excludeCredentialIds: string;
-        isSetRetry?: boolean;
-        isAppInitiatedAction?: boolean;
-    };
-
-    export type LoginUpdatePassword = Common & {
-        pageId: "login-update-password.ftl";
-    };
-
-    export type LoginIdpLinkConfirm = Common & {
-        pageId: "login-idp-link-confirm.ftl";
-        idpAlias: string;
-    };
-
-    export type LoginIdpLinkEmail = Common & {
-        pageId: "login-idp-link-email.ftl";
-        brokerContext: {
-            username: string;
-        };
-        idpAlias: string;
-    };
-
-    export type LoginPageExpired = Common & {
-        pageId: "login-page-expired.ftl";
-    };
-
-    export type LoginConfigTotp = Common & {
-        pageId: "login-config-totp.ftl";
-        mode?: "qr" | "manual" | undefined | null;
+    export type Totp = Common & {
+        pageId: "totp.ftl";
         totp: {
+            enabled: boolean;
             totpSecretEncoded: string;
             qrUrl: string;
             policy: {
@@ -447,311 +183,119 @@ export declare namespace KcContext {
             totpSecret: string;
             otpCredentials: { id: string; userLabel: string }[];
         };
+        mode?: "qr" | "manual" | undefined | null;
+        isAppInitiatedAction: boolean;
+        stateChecker: string;
     };
 
-    export type LogoutConfirm = Common & {
-        pageId: "logout-confirm.ftl";
-        url: {
-            logoutConfirmAction: string;
+    export type Applications = Common & {
+        pageId: "applications.ftl";
+        features: {
+            log: boolean;
+            identityFederation: boolean;
+            authorization: boolean;
+            passwordUpdateSupported: boolean;
         };
-        client: {
-            baseUrl?: string;
-        };
-        logoutConfirm: {
-            code: string;
-            skipLink?: boolean;
-        };
-    };
-
-    export type LoginUpdateProfile = Common & {
-        pageId: "login-update-profile.ftl";
-        profile: UserProfile;
-        passwordPolicies?: PasswordPolicies;
-    };
-
-    export type IdpReviewUserProfile = Common & {
-        pageId: "idp-review-user-profile.ftl";
-        profile: UserProfile;
-        passwordPolicies?: PasswordPolicies;
-    };
-
-    export type UpdateEmail = Common & {
-        pageId: "update-email.ftl";
-        profile: UserProfile;
-        passwordPolicies?: PasswordPolicies;
-    };
-
-    export type SelectAuthenticator = Common & {
-        pageId: "select-authenticator.ftl";
-        auth: {
-            authenticationSelections: SelectAuthenticator.AuthenticationSelection[];
-        };
-    };
-
-    export namespace SelectAuthenticator {
-        export type AuthenticationSelection = {
-            authExecId: string;
-            displayName: string;
-            helpText: string;
-            iconCssClass?: ClassKey;
-        };
-    }
-
-    export type DeleteCredential = Common & {
-        pageId: "delete-credential.ftl";
-        credentialLabel: string;
-    };
-
-    export type Code = Common & {
-        pageId: "code.ftl";
-        code: {
-            success: boolean;
-            code?: string;
-            error?: string;
-        };
-    };
-
-    export type DeleteAccountConfirm = Common & {
-        pageId: "delete-account-confirm.ftl";
-        triggered_from_aia: boolean;
-    };
-
-    export type FrontchannelLogout = Common & {
-        pageId: "frontchannel-logout.ftl";
-        logout: {
-            clients: {
-                name: string;
-                frontChannelLogoutUrl: string;
+        stateChecker: string;
+        applications: {
+            applications: {
+                realmRolesAvailable: {
+                    name: string;
+                    description: string;
+                    compositesStream?: Record<string, unknown>;
+                    clientRole?: boolean;
+                    composite?: boolean;
+                    id?: string;
+                    containerId?: string;
+                    attributes?: Record<string, unknown>;
+                }[];
+                resourceRolesAvailable: Record<
+                    string,
+                    {
+                        roleName: string;
+                        roleDescription?: string;
+                        clientName: string;
+                        clientId: string;
+                    }[]
+                >;
+                additionalGrants: string[];
+                clientScopesGranted: string[];
+                effectiveUrl?: string;
+                client: {
+                    alwaysDisplayInConsole: boolean;
+                    attributes: Record<string, unknown>;
+                    authenticationFlowBindingOverrides: Record<string, unknown>;
+                    baseUrl?: string;
+                    bearerOnly: boolean;
+                    clientAuthenticatorType: string;
+                    clientId: string;
+                    consentRequired: boolean;
+                    consentScreenText: string;
+                    description: string;
+                    directAccessGrantsEnabled: boolean;
+                    displayOnConsentScreen: boolean;
+                    dynamicScope: boolean;
+                    enabled: boolean;
+                    frontchannelLogout: boolean;
+                    fullScopeAllowed: boolean;
+                    id: string;
+                    implicitFlowEnabled: boolean;
+                    includeInTokenScope: boolean;
+                    managementUrl: string;
+                    name?: string;
+                    nodeReRegistrationTimeout: string;
+                    notBefore: string;
+                    protocol: string;
+                    protocolMappersStream: Record<string, unknown>;
+                    publicClient: boolean;
+                    realm: Record<string, unknown>;
+                    realmScopeMappingsStream: Record<string, unknown>;
+                    redirectUris: string[];
+                    registeredNodes: Record<string, unknown>;
+                    rolesStream: Record<string, unknown>;
+                    rootUrl?: string;
+                    scopeMappingsStream: Record<string, unknown>;
+                    secret: string;
+                    serviceAccountsEnabled: boolean;
+                    standardFlowEnabled: boolean;
+                    surrogateAuthRequired: boolean;
+                    webOrigins: string[];
+                };
             }[];
-            logoutRedirectUri?: string;
         };
     };
 
-    export type LoginRecoveryAuthnCodeConfig = Common & {
-        pageId: "login-recovery-authn-code-config.ftl";
-        recoveryAuthnCodesConfigBean: {
-            generatedRecoveryAuthnCodesList: string[];
-            generatedRecoveryAuthnCodesAsString: string;
-            generatedAt: number;
-        };
-    };
-
-    export type LoginRecoveryAuthnCodeInput = Common & {
-        pageId: "login-recovery-authn-code-input.ftl";
-        recoveryAuthnCodesInputBean: {
-            codeNumber: number;
-        };
-    };
-
-    export type LoginResetOtp = Common & {
-        pageId: "login-reset-otp.ftl";
-        configuredOtpCredentials: {
-            userOtpCredentials: {
-                id: string;
-                userLabel: string;
+    export type Log = Common & {
+        pageId: "log.ftl";
+        log: {
+            events: {
+                date: string | number | Date;
+                event: string;
+                ipAddress: string;
+                client: string;
+                details: { value: string; key: string }[];
             }[];
-            selectedCredentialId: string;
         };
     };
 
-    export type LoginX509Info = Common & {
-        pageId: "login-x509-info.ftl";
-        x509: {
-            formData: {
-                subjectDN?: string;
-                isUserEnabled?: boolean;
-                username?: string;
-            };
+    export type FederatedIdentity = Common & {
+        pageId: "federatedIdentity.ftl";
+        stateChecker: string;
+        federatedIdentity: {
+            identities: {
+                providerId: string;
+                displayName: string;
+                userName: string;
+                connected: boolean;
+            }[];
+            removeLinkPossible: boolean;
         };
-    };
-
-    export type WebauthnError = Common & {
-        pageId: "webauthn-error.ftl";
-        isAppInitiatedAction?: boolean;
-    };
-
-    export type LoginPasskeysConditionalAuthenticate = Common & {
-        pageId: "login-passkeys-conditional-authenticate.ftl";
-        realm: {
-            registrationAllowed: boolean;
-            password: boolean;
-        };
-        url: {
-            registrationUrl: string;
-        };
-        registrationDisabled?: boolean;
-        isUserIdentified: boolean | "true" | "false";
-        challenge: string;
-        userVerification: string;
-        rpId: string;
-        createTimeout: number | string;
-
-        authenticators?: {
-            authenticators: WebauthnAuthenticate.WebauthnAuthenticator[];
-        };
-        shouldDisplayAuthenticators?: boolean;
-        usernameHidden?: boolean;
-        login: {
-            username?: string;
-        };
-    };
-
-    export type LoginIdpLinkConfirmOverride = Common & {
-        pageId: "login-idp-link-confirm-override.ftl";
-        url: {
-            loginRestartFlowUrl: string;
-        };
-        idpDisplayName: string;
-    };
-}
-
-export type UserProfile = {
-    attributesByName: Record<string, Attribute>;
-    html5DataAnnotations?: Record<string, string>;
-};
-
-export type Attribute = {
-    name: string;
-    displayName?: string;
-    required: boolean;
-    value?: string;
-    values?: string[];
-    group?: {
-        annotations: Record<string, string>;
-        html5DataAnnotations: Record<string, string>;
-        displayHeader?: string;
-        name: string;
-        displayDescription?: string;
-    };
-    html5DataAnnotations?: {
-        kcNumberFormat?: string;
-        kcNumberUnFormat?: string;
-    };
-    readOnly: boolean;
-    validators: Validators;
-    annotations: {
-        inputType?: string;
-        inputTypeSize?: `${number}` | number;
-        inputOptionsFromValidation?: string;
-        inputOptionLabels?: Record<string, string | undefined>;
-        inputOptionLabelsI18nPrefix?: string;
-        inputTypeCols?: `${number}` | number;
-        inputTypeRows?: `${number}` | number;
-        inputTypeMaxlength?: `${number}` | number;
-        inputHelperTextBefore?: string;
-        inputHelperTextAfter?: string;
-        inputTypePlaceholder?: string;
-        inputTypePattern?: string;
-        inputTypeMinlength?: `${number}` | number;
-        inputTypeMax?: string;
-        inputTypeMin?: string;
-        inputTypeStep?: string;
-    };
-    multivalued?: boolean;
-    autocomplete?:
-        | "on"
-        | "off"
-        | "name"
-        | "honorific-prefix"
-        | "given-name"
-        | "additional-name"
-        | "family-name"
-        | "honorific-suffix"
-        | "nickname"
-        | "email"
-        | "username"
-        | "new-password"
-        | "current-password"
-        | "one-time-code"
-        | "organization-title"
-        | "organization"
-        | "street-address"
-        | "address-line1"
-        | "address-line2"
-        | "address-line3"
-        | "address-level4"
-        | "address-level3"
-        | "address-level2"
-        | "address-level1"
-        | "country"
-        | "country-name"
-        | "postal-code"
-        | "cc-name"
-        | "cc-given-name"
-        | "cc-additional-name"
-        | "cc-family-name"
-        | "cc-number"
-        | "cc-exp"
-        | "cc-exp-month"
-        | "cc-exp-year"
-        | "cc-csc"
-        | "cc-type"
-        | "transaction-currency"
-        | "transaction-amount"
-        | "language"
-        | "bday"
-        | "bday-day"
-        | "bday-month"
-        | "bday-year"
-        | "sex"
-        | "tel"
-        | "tel-country-code"
-        | "tel-national"
-        | "tel-area-code"
-        | "tel-local"
-        | "tel-extension"
-        | "impp"
-        | "url"
-        | "photo";
-};
-
-export type Validators = {
-    length?: Validators.DoIgnoreEmpty & Validators.Range;
-    integer?: Validators.DoIgnoreEmpty & Validators.Range;
-    email?: Validators.DoIgnoreEmpty;
-    pattern?: Validators.DoIgnoreEmpty & Validators.ErrorMessage & { pattern: string };
-    options?: Validators.Options;
-    multivalued?: Validators.DoIgnoreEmpty & Validators.Range;
-    // NOTE: Following are the validators for which we don't implement client side validation yet
-    // or for which the validation can't be performed on the client side.
-    /*
-    double?: Validators.DoIgnoreEmpty & Validators.Range;
-    "up-immutable-attribute"?: {};
-    "up-attribute-required-by-metadata-value"?: {};
-    "up-username-has-value"?: {};
-    "up-duplicate-username"?: {};
-    "up-username-mutation"?: {};
-    "up-email-exists-as-username"?: {};
-    "up-blank-attribute-value"?: Validators.ErrorMessage & { "fail-on-null": boolean; };
-    "up-duplicate-email"?: {};
-    "local-date"?: Validators.DoIgnoreEmpty;
-    "person-name-prohibited-characters"?: Validators.DoIgnoreEmpty & Validators.ErrorMessage;
-    uri?: Validators.DoIgnoreEmpty;
-    "username-prohibited-characters"?: Validators.DoIgnoreEmpty & Validators.ErrorMessage;
-    */
-};
-
-export declare namespace Validators {
-    export type DoIgnoreEmpty = {
-        "ignore.empty.value"?: boolean;
-    };
-
-    export type ErrorMessage = {
-        "error-message"?: string;
-    };
-
-    export type Range = {
-        min?: `${number}` | number;
-        max?: `${number}` | number;
-    };
-    export type Options = {
-        options: string[];
     };
 }
 
 {
     type Got = KcContext["pageId"];
-    type Expected = LoginThemePageId;
+    type Expected = AccountThemePageId;
 
     type OnlyInGot = Exclude<Got, Expected>;
     type OnlyInExpected = Exclude<Expected, Got>;
@@ -760,25 +304,4 @@ export declare namespace Validators {
     assert<Equals<OnlyInExpected, never>>();
 }
 
-/**
- * Theses values are added by: https://github.com/jcputney/keycloak-theme-additional-info-extension
- * A Keycloak Java extension used as dependency in Keycloakify.
- */
-export type PasswordPolicies = {
-    /** The minimum length of the password */
-    length?: number;
-    /** The maximum length of the password */
-    maxLength?: number;
-    /** The minimum number of digits required in the password */
-    digits?: number;
-    /** The minimum number of lowercase characters required in the password */
-    lowerCase?: number;
-    /** The minimum number of uppercase characters required in the password */
-    upperCase?: number;
-    /** The minimum number of special characters required in the password */
-    specialChars?: number;
-    /** Whether the password can be the username */
-    notUsername?: boolean;
-    /** Whether the password can be the email address */
-    notEmail?: boolean;
-};
+assert<KcContext["themeType"] extends ThemeType ? true : false>();

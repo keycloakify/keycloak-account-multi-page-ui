@@ -36,6 +36,10 @@ import { join as pathJoin, sep as pathSep } from "path";
                 return undefined;
             }
 
+            if (fileRelativePath === pathJoin("core", "KcContext", "index.ts")) {
+                return undefined;
+            }
+
             if (fileRelativePath === pathJoin("core", "kcClsx.ts")) {
                 return undefined;
             }
