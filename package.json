@@ -7,7 +7,7 @@
         "url": "git://github.com/keycloakify/keycloak-account-multi-page-ui.git"
     },
     "scripts": {
-        "prepare": "tsx scripts/preprepare.tsx && tsx scripts/prepare/main.ts",
+        "disabled-prepare": "tsx scripts/preprepare.tsx && tsx scripts/prepare/main.ts",
         "build": "tsx scripts/build.ts",
         "_format": "prettier '**/*.{ts,tsx,json,md}'",
         "format": "npm run _format -- --write",
