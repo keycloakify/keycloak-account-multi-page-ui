@@ -36,7 +36,7 @@ import { join as pathJoin, sep as pathSep } from "path";
                 return undefined;
             }
 
-            if (fileRelativePath === pathJoin("core", "KcContext", "index.ts")) {
+            if (fileRelativePath === pathJoin("KcContext", "index.ts")) {
                 return undefined;
             }
 
