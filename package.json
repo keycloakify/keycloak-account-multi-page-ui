@@ -1,10 +1,10 @@
 {
-    "name": "@keycloakify/keycloak-login-ui",
-    "version": "250004.0.0",
-    "description": "React implementation of Keycloak Login v2 for Keycloakify",
+    "name": "@keycloakify/keycloak-account-multi-page-ui",
+    "version": "0.0.0",
+    "description": "React implementation of Keycloak Account Multi Page UI.",
     "repository": {
         "type": "git",
-        "url": "git://github.com/keycloakify/login.git"
+        "url": "git://github.com/keycloakify/keycloak-account-multi-page-ui.git"
     },
     "scripts": {
         "prepare": "tsx scripts/prepare/main.ts",
