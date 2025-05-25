@@ -1,4 +1,4 @@
-export const THEME_NAME = "login";
+export const THEME_NAME = "account";
 
 export const keycloakifyExtraMessages: Record<
     | "en"

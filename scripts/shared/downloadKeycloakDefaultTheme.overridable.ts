@@ -3,7 +3,7 @@ import { downloadAndExtractArchive } from "keycloakify/bin/tools/downloadAndExtr
 import { join as pathJoin } from "path";
 import type { Param0 } from "tsafe";
 
-export const KEYCLOAK_VERSION = "25.0.4";
+export const KEYCLOAK_VERSION = "21.1.2";
 
 export function createOnArchiveFile() {
     let kcNodeModulesKeepFilePaths: Set<string> | undefined = undefined;
@@ -15,21 +15,35 @@ export function createOnArchiveFile() {
             return;
         }
 
-        const { writeFile } = params;
+        const { readFile, writeFile } = params;
 
         if (!fileRelativePath.startsWith("base") && !fileRelativePath.startsWith("keycloak")) {
             return;
         }
 
         if (
-            !fileRelativePath.startsWith(pathJoin("base", "login")) &&
-            !fileRelativePath.startsWith(pathJoin("keycloak", "login")) &&
+            !fileRelativePath.startsWith(pathJoin("base", "account")) &&
+            !fileRelativePath.startsWith(pathJoin("keycloak", "account")) &&
             !fileRelativePath.startsWith(pathJoin("keycloak", "common"))
         ) {
             return;
         }
 
-        if (fileRelativePath.endsWith(".ftl")) {
+        skip_web_modules: {
+            if (
+                !fileRelativePath.startsWith(pathJoin("keycloak", "common", "resources", "web_modules"))
+            ) {
+                break skip_web_modules;
+            }
+
+            return;
+        }
+
+        skip_lib: {
+            if (!fileRelativePath.startsWith(pathJoin("keycloak", "common", "resources", "lib"))) {
+                break skip_lib;
+            }
+
             return;
         }
 
@@ -47,24 +61,14 @@ export function createOnArchiveFile() {
 
             if (kcNodeModulesKeepFilePaths === undefined) {
                 kcNodeModulesKeepFilePaths = new Set([
-                    pathJoin("@patternfly", "patternfly", "patternfly.min.css"),
                     pathJoin("patternfly", "dist", "css", "patternfly.min.css"),
                     pathJoin("patternfly", "dist", "css", "patternfly-additions.min.css"),
                     pathJoin("patternfly", "dist", "fonts", "OpenSans-Regular-webfont.woff2"),
-                    pathJoin("patternfly", "dist", "fonts", "OpenSans-Light-webfont.woff2"),
                     pathJoin("patternfly", "dist", "fonts", "OpenSans-Bold-webfont.woff2"),
-                    pathJoin("patternfly", "dist", "fonts", "OpenSans-Bold-webfont.woff"),
-                    pathJoin("patternfly", "dist", "fonts", "OpenSans-Bold-webfont.ttf"),
-                    pathJoin("patternfly", "dist", "fonts", "fontawesome-webfont.woff2"),
-                    pathJoin("patternfly", "dist", "fonts", "PatternFlyIcons-webfont.ttf"),
-                    pathJoin("patternfly", "dist", "fonts", "PatternFlyIcons-webfont.woff"),
+                    pathJoin("patternfly", "dist", "fonts", "OpenSans-Light-webfont.woff2"),
                     pathJoin("patternfly", "dist", "fonts", "OpenSans-Semibold-webfont.woff2"),
-                    pathJoin("patternfly", "dist", "fonts", "OpenSans-SemiboldItalic-webfont.woff2"),
-                    pathJoin("patternfly", "dist", "fonts", "OpenSans-SemiboldItalic-webfont.woff"),
-                    pathJoin("patternfly", "dist", "fonts", "OpenSans-SemiboldItalic-webfont.ttf"),
-                    pathJoin("patternfly", "dist", "img", "bg-login.jpg"),
-                    pathJoin("jquery", "dist", "jquery.min.js"),
-                    pathJoin("rfc4648", "lib", "rfc4648.js")
+                    pathJoin("patternfly", "dist", "fonts", "PatternFlyIcons-webfont.ttf"),
+                    pathJoin("patternfly", "dist", "fonts", "PatternFlyIcons-webfont.woff")
                 ]);
             }
 
@@ -79,26 +83,21 @@ export function createOnArchiveFile() {
             return;
         }
 
-        skip_vendor: {
-            if (!fileRelativePath.startsWith(pathJoin("keycloak", "common", "resources", "vendor"))) {
-                break skip_vendor;
+        patch_account_css: {
+            if (
+                fileRelativePath !== pathJoin("keycloak", "account", "resources", "css", "account.css")
+            ) {
+                break patch_account_css;
             }
 
-            return;
-        }
+            await writeFile({
+                fileRelativePath,
+                modifiedData: Buffer.from(
+                    (await readFile()).toString("utf8").replace("top: -34px;", "top: -34px !important;"),
+                    "utf8"
+                )
+            });
 
-        skip_rollup_config: {
-            if (fileRelativePath !== pathJoin("keycloak", "common", "resources", "rollup.config.js")) {
-                break skip_rollup_config;
-            }
-
-            return;
-        }
-
-        skip_package_json: {
-            if (fileRelativePath !== pathJoin("keycloak", "common", "resources", "package.json")) {
-                break skip_package_json;
-            }
             return;
         }
 
