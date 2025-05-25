@@ -42,3 +42,12 @@ jspm_packages
 
 /.yarn_home
 /dist
+
+/scripts
+!/scripts/prepare.ts
+!/scripts/**/*.overridable.ts
+
+/src
+!/src/core/kcClsx.ts
+!/src/core/i18n/messages_defaultSet/
+
