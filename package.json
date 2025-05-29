@@ -27,11 +27,8 @@
     "license": "MIT",
     "keywords": [],
     "homepage": "https://github.com/keycloakify/login",
-    "dependencies": {
-        "tsafe": "^1.8.5"
-    },
     "peerDependencies": {
-        "keycloakify": "^11.8.30"
+        "tsafe": "^1.8.5"
     },
     "devDependencies": {
         "@types/node": "^22.15.18",
@@ -39,7 +36,6 @@
         "@types/react": "^19.1.4",
         "evt": "^2.5.9",
         "husky": "^4.3.8",
-        "keycloakify": "^11.8.30",
         "lint-staged": "^11.1.1",
         "make-fetch-happen": "^11.0.3",
         "yauzl": "^2.10.0",
@@ -48,6 +44,8 @@
         "react": "^18.3.1",
         "tsx": "^4.19.4",
         "typescript": "^5.8.3",
+        "keycloakify": "^11.8.35",
+        "tsafe": "^1.8.5",
         "zod": "^3.24.4",
         "webpack": "5.93.0",
         "webpack-cli": "5.1.4",
