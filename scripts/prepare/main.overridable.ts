@@ -2,7 +2,6 @@ import { transformCodebase } from "../../node_modules/keycloakify/src/bin/tools/
 import * as fs from "fs";
 import { join as pathJoin } from "path";
 import { downloadKeycloakDefaultTheme } from "../shared/downloadKeycloakDefaultTheme";
-import { WELL_KNOWN_DIRECTORY_BASE_NAME } from "keycloakify/src/bin/shared/constants";
 import { getThisCodebaseRootDirPath } from "../tools/getThisCodebaseRootDirPath.overridable";
 import { supportedLanguages } from "./generateI18nMessages.overridable";
 import * as fsPr from "fs/promises";
@@ -30,7 +29,7 @@ async function createAccountV1Dir() {
 
     transformCodebase({
         srcDirPath: pathJoin(extractedDirPath, "keycloak", "common", "resources"),
-        destDirPath: pathJoin(destDirPath, "resources", WELL_KNOWN_DIRECTORY_BASE_NAME.RESOURCES_COMMON)
+        destDirPath: pathJoin(destDirPath, "resources", "resources-common")
     });
 
     fs.writeFileSync(
@@ -52,7 +51,7 @@ async function createAccountV1Dir() {
                             "patternfly-additions.min.css"
                         ].map(
                             fileBasename =>
-                                `${WELL_KNOWN_DIRECTORY_BASE_NAME.RESOURCES_COMMON}/node_modules/patternfly/dist/css/${fileBasename}`
+                                `"resources-common"/node_modules/patternfly/dist/css/${fileBasename}`
                         )
                     ].join(" "),
                 "",
