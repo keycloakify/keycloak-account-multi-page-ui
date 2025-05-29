@@ -4,9 +4,11 @@ import { getProxyFetchOptions } from "../node_modules/keycloakify/src/bin/tools/
 import { transformCodebase } from "../node_modules/keycloakify/src/bin/tools/transformCodebase";
 import { join as pathJoin, sep as pathSep } from "path";
 
+const KEYCLOAKIFY_KEYCLOAK_LOGIN_UI_VERSION = "250004.0.14";
+
 (async () => {
     const { extractedDirPath } = await downloadAndExtractArchive({
-        url: "https://github.com/keycloakify/keycloak-login-ui/archive/refs/heads/main.zip",
+        url: `https://github.com/keycloakify/keycloak-login-ui/archive/refs/tags/v${KEYCLOAKIFY_KEYCLOAK_LOGIN_UI_VERSION}.zip`,
         cacheDirPath: pathJoin(getThisCodebaseRootDirPath(), "node_modules", ".cache", "scripts"),
         fetchOptions: getProxyFetchOptions({
             npmConfigGetCwd: getThisCodebaseRootDirPath()
