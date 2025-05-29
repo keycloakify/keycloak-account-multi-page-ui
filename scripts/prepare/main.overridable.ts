@@ -51,7 +51,7 @@ async function createAccountV1Dir() {
                             "patternfly-additions.min.css"
                         ].map(
                             fileBasename =>
-                                `"resources-common"/node_modules/patternfly/dist/css/${fileBasename}`
+                                `resources-common/node_modules/patternfly/dist/css/${fileBasename}`
                         )
                     ].join(" "),
                 "",
