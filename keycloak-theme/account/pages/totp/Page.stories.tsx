@@ -37,12 +37,7 @@ export const Default: Story = {
                 },
                 url: {
                     totpUrl: "http://localhost:8080/realms/myrealm/account/totp"
-                },
-                keycloakifyVersion: "9.6.1",
-                themeVersion: "1.0.10",
-                themeType: "account",
-                themeName: "keycloakify",
-                pageId: "totp.ftl"
+                }
             }}
         />
     )
@@ -88,12 +83,7 @@ export const WithTotpEnabled: Story = {
                 realm: {
                     userManagedAccessAllowed: true,
                     internationalizationEnabled: false
-                },
-                keycloakifyVersion: "9.6.1",
-                themeVersion: "1.0.10",
-                themeType: "account",
-                themeName: "keycloakify",
-                pageId: "totp.ftl"
+                }
             }}
         />
     )
@@ -126,12 +116,7 @@ export const WithManualMode: Story = {
                 },
                 url: {
                     totpUrl: "http://localhost:8080/realms/myrealm/account/totp?mode=manual"
-                },
-                keycloakifyVersion: "9.6.1",
-                themeVersion: "1.0.10",
-                themeType: "account",
-                themeName: "keycloakify",
-                pageId: "totp.ftl"
+                }
             }}
         />
     )
@@ -177,12 +162,7 @@ export const MoreThanOneTotpProviders: Story = {
                 realm: {
                     userManagedAccessAllowed: true,
                     internationalizationEnabled: false
-                },
-                keycloakifyVersion: "9.6.1",
-                themeVersion: "1.0.10",
-                themeType: "account",
-                themeName: "keycloakify",
-                pageId: "totp.ftl"
+                }
             }}
         />
     )
