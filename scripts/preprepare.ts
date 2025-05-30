@@ -1,10 +1,10 @@
-import { downloadAndExtractArchive } from "../node_modules/keycloakify/src/bin/tools/downloadAndExtractArchive";
+import { downloadAndExtractArchive } from "keycloakify/src/bin/tools/downloadAndExtractArchive";
 import { getThisCodebaseRootDirPath } from "./tools/getThisCodebaseRootDirPath.overridable";
-import { getProxyFetchOptions } from "../node_modules/keycloakify/src/bin/tools/fetchProxyOptions";
-import { transformCodebase } from "../node_modules/keycloakify/src/bin/tools/transformCodebase";
+import { getProxyFetchOptions } from "keycloakify/src/bin/tools/fetchProxyOptions";
+import { transformCodebase } from "keycloakify/src/bin/tools/transformCodebase";
 import { join as pathJoin, sep as pathSep } from "path";
 
-const KEYCLOAKIFY_KEYCLOAK_LOGIN_UI_COMMIT = "054a0aac58e3695226559779a9ef8af848eddc70";
+const KEYCLOAKIFY_KEYCLOAK_LOGIN_UI_COMMIT = "da93d6dbbc297dca4cfc3f7cee55a12771b9067b";
 
 (async () => {
     const { extractedDirPath } = await downloadAndExtractArchive({
