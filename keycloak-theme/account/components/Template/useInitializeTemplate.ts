@@ -1,5 +1,6 @@
 import { useInsertLinkTags } from "keycloakify/tools/useInsertLinkTags";
 import { useKcClsx } from "@keycloakify/keycloak-account-multi-page-ui/useKcClsx";
+import { BASE_URL } from "@keycloakify/keycloak-account-multi-page-ui/import.meta.env.BASE_URL.ts";
 import { useKcContext } from "../../KcContext";
 
 export function useInitializeTemplate() {
@@ -12,9 +13,9 @@ export function useInitializeTemplate() {
         hrefs: !doUseDefaultCss
             ? []
             : [
-                  `${kcContext.url.resourcesCommonPath}/node_modules/patternfly/dist/css/patternfly.min.css`,
-                  `${kcContext.url.resourcesCommonPath}/node_modules/patternfly/dist/css/patternfly-additions.min.css`,
-                  `${kcContext.url.resourcesPath}/css/account.css`
+                  `${BASE_URL}keycloak-account-multi-page-ui/resources-common/node_modules/patternfly/dist/css/patternfly.min.css`,
+                  `${BASE_URL}keycloak-account-multi-page-ui/resources-common/node_modules/patternfly/dist/css/patternfly-additions.min.css`,
+                  `${BASE_URL}keycloak-account-multi-page-ui/css/account.css`
               ]
     });
 

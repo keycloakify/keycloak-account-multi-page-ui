@@ -1,12 +1,8 @@
 import "keycloakify/tools/Object.fromEntries";
-import { WELL_KNOWN_DIRECTORY_BASE_NAME } from "keycloakify/bin/shared/constants";
 import { id } from "tsafe/id";
 import type { KcContext } from "./KcContext";
-import { BASE_URL } from "keycloakify/lib/BASE_URL";
 import { assert, type Equals } from "tsafe/assert";
 import type { LanguageTag } from "keycloakify/account/i18n/messages_defaultSet/types";
-
-const resourcesPath = `${BASE_URL}${WELL_KNOWN_DIRECTORY_BASE_NAME.KEYCLOAKIFY_DEV_RESOURCES}/account`;
 
 export const kcContextCommonMock: KcContext.Common = {
     themeVersion: "0.0.0",
@@ -14,8 +10,6 @@ export const kcContextCommonMock: KcContext.Common = {
     themeType: "account",
     themeName: "my-theme-name",
     url: {
-        resourcesPath,
-        resourcesCommonPath: `${resourcesPath}/${WELL_KNOWN_DIRECTORY_BASE_NAME.RESOURCES_COMMON}`,
         resourceUrl: "#",
         accountUrl: "#",
         applicationsUrl: "#",

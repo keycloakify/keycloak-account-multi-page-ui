@@ -53,8 +53,6 @@ export declare namespace KcContext {
             logUrl: string;
             logoutUrl: string;
             resourceUrl: string;
-            resourcesCommonPath: string;
-            resourcesPath: string;
             /** @deprecated, not present in recent keycloak version apparently, use kcContext.referrer instead */
             referrerURI?: string;
             getLogoutUrl: () => string;
