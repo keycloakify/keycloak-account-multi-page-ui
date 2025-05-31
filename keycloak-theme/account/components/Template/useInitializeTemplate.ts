@@ -13,9 +13,9 @@ export function useInitializeTemplate() {
         hrefs: !doUseDefaultCss
             ? []
             : [
-                  `${BASE_URL}keycloak-account-multi-page-ui/resources-common/node_modules/patternfly/dist/css/patternfly.min.css`,
-                  `${BASE_URL}keycloak-account-multi-page-ui/resources-common/node_modules/patternfly/dist/css/patternfly-additions.min.css`,
-                  `${BASE_URL}keycloak-account-multi-page-ui/css/account.css`
+                  `${BASE_URL}keycloak-theme/account/resources-common/node_modules/patternfly/dist/css/patternfly.min.css`,
+                  `${BASE_URL}keycloak-theme/account/resources-common/node_modules/patternfly/dist/css/patternfly-additions.min.css`,
+                  `${BASE_URL}keycloak-theme/account/css/account.css`
               ]
     });
 
