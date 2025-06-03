@@ -1,5 +1,5 @@
 import {
-    ExtendKcContext,
+    type ExtendKcContext,
     createUseKcContext
 } from "@keycloakify/keycloak-account-multi-page-ui/KcContext";
 import type { KcEnvName, ThemeName } from "../kc.gen";

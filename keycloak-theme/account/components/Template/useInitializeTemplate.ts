@@ -1,11 +1,8 @@
 import { useInsertLinkTags } from "keycloakify/tools/useInsertLinkTags";
 import { useKcClsx } from "@keycloakify/keycloak-account-multi-page-ui/useKcClsx";
-import { BASE_URL } from "@keycloakify/keycloak-account-multi-page-ui/import.meta.env.BASE_URL.ts";
-import { useKcContext } from "../../KcContext";
+import { BASE_URL } from "@keycloakify/keycloak-account-multi-page-ui/import.meta.env.BASE_URL";
 
 export function useInitializeTemplate() {
-    const { kcContext } = useKcContext();
-
     const { doUseDefaultCss } = useKcClsx();
 
     const { areAllStyleSheetsLoaded } = useInsertLinkTags({
