@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { clsx } from "keycloakify/tools/clsx";
-import { kcSanitize } from "keycloakify/lib/kcSanitize";
+import { clsx } from "@keycloakify/keycloak-account-multi-page-ui/tools/clsx";
+import { kcSanitize } from "@keycloakify/keycloak-account-multi-page-ui/kcSanitize";
 import { useSetClassName } from "@keycloakify/keycloak-account-multi-page-ui/tools/useSetClassName";
 import { useKcClsx } from "@keycloakify/keycloak-account-multi-page-ui/useKcClsx";
 import { useInitializeTemplate } from "./useInitializeTemplate";

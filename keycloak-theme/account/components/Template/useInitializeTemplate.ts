@@ -1,4 +1,4 @@
-import { useInsertLinkTags } from "keycloakify/tools/useInsertLinkTags";
+import { useInsertLinkTags } from "@keycloakify/keycloak-account-multi-page-ui/tools/useInsertLinkTags";
 import { useKcClsx } from "@keycloakify/keycloak-account-multi-page-ui/useKcClsx";
 import { BASE_URL } from "@keycloakify/keycloak-account-multi-page-ui/import.meta.env.BASE_URL";
 

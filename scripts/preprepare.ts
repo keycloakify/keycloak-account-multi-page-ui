@@ -4,7 +4,7 @@ import { getProxyFetchOptions } from "keycloakify/src/bin/tools/fetchProxyOption
 import { transformCodebase } from "keycloakify/src/bin/tools/transformCodebase";
 import { join as pathJoin, sep as pathSep } from "path";
 
-const KEYCLOAKIFY_KEYCLOAK_LOGIN_UI_COMMIT = "4b7ab9e26b3f632fb37726c3935e4b2300e14c42";
+const KEYCLOAKIFY_KEYCLOAK_LOGIN_UI_COMMIT = "69710556252db11ce82c113d57b819d5e747323b";
 
 (async () => {
     const { extractedDirPath } = await downloadAndExtractArchive({

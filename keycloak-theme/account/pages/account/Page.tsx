@@ -1,5 +1,5 @@
 import { assert } from "tsafe/assert";
-import { clsx } from "keycloakify/tools/clsx";
+import { clsx } from "@keycloakify/keycloak-account-multi-page-ui/tools/clsx";
 import { useKcClsx } from "@keycloakify/keycloak-account-multi-page-ui/useKcClsx";
 import { useKcContext } from "../../KcContext";
 import { useI18n } from "../../i18n";
