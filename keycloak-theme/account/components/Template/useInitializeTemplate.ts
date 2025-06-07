@@ -1,12 +1,12 @@
 import { useInsertLinkTags } from "@keycloakify/keycloak-account-multi-page-ui/tools/useInsertLinkTags";
 import { useKcClsx } from "@keycloakify/keycloak-account-multi-page-ui/useKcClsx";
-import { BASE_URL } from "@keycloakify/keycloak-account-multi-page-ui/import.meta.env.BASE_URL";
+import { BASE_URL } from "@keycloakify/keycloak-account-multi-page-ui/BASE_URL";
 
 export function useInitializeTemplate() {
     const { doUseDefaultCss } = useKcClsx();
 
     const { areAllStyleSheetsLoaded } = useInsertLinkTags({
-        componentOrHookName: "Template",
+        effectId: "Template",
         hrefs: !doUseDefaultCss
             ? []
             : [
