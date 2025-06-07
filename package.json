@@ -1,6 +1,6 @@
 {
     "name": "@keycloakify/keycloak-account-multi-page-ui",
-    "version": "210102.0.14",
+    "version": "210102.0.15",
     "description": "React implementation of Keycloak Account Multi Page UI.",
     "repository": {
         "type": "git",
