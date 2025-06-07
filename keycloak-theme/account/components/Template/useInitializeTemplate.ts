@@ -1,6 +1,6 @@
 import { useInsertLinkTags } from "@keycloakify/keycloak-account-multi-page-ui/tools/useInsertLinkTags";
 import { useKcClsx } from "@keycloakify/keycloak-account-multi-page-ui/useKcClsx";
-import { BASE_URL } from "@keycloakify/keycloak-account-multi-page-ui/BASE_URL";
+import { BASE_URL } from "../../../kc.gen";
 
 export function useInitializeTemplate() {
     const { doUseDefaultCss } = useKcClsx();
