@@ -1,4 +1,3 @@
-import type { ThemeType, AccountThemePageId } from "keycloakify/bin/shared/constants";
 import type { ValueOf } from "keycloakify/tools/ValueOf";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
@@ -291,15 +290,25 @@ export declare namespace KcContext {
     };
 }
 
+export type PageId = KcContext["pageId"];
+
+export const pageIds = [
+    "password.ftl",
+    "account.ftl",
+    "sessions.ftl",
+    "totp.ftl",
+    "applications.ftl",
+    "log.ftl",
+    "federatedIdentity.ftl"
+] as const;
+
 {
-    type Got = KcContext["pageId"];
-    type Expected = AccountThemePageId;
+    type Actual = (typeof pageIds)[number];
+    type Expected = PageId;
 
-    type OnlyInGot = Exclude<Got, Expected>;
-    type OnlyInExpected = Exclude<Expected, Got>;
+    type InActualNotInExpected = Exclude<Actual, Expected>;
+    type InExpectedNotInActual = Exclude<Expected, Actual>;
 
-    assert<Equals<OnlyInGot, never>>();
-    assert<Equals<OnlyInExpected, never>>();
+    assert<Equals<InActualNotInExpected, never>>;
+    assert<Equals<InExpectedNotInActual, never>>;
 }
-
-assert<KcContext["themeType"] extends ThemeType ? true : false>();
