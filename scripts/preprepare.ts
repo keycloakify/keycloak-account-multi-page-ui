@@ -4,11 +4,11 @@ import { getProxyFetchOptions } from "keycloakify/src/bin/tools/fetchProxyOption
 import { transformCodebase } from "keycloakify/src/bin/tools/transformCodebase";
 import { join as pathJoin, sep as pathSep } from "path";
 
-const KEYCLOAKIFY_KEYCLOAK_LOGIN_UI_COMMIT = "b4899f2656861ac4364ac7c028dbfa497a743f7d";
+const KEYCLOAKIFY_LOGIN_UI_COMMIT = "8ce55a90ca4c2ae5570af059a9590810bfc9825b";
 
 (async () => {
     const { extractedDirPath } = await downloadAndExtractArchive({
-        url: `https://github.com/keycloakify/keycloak-login-ui/archive/${KEYCLOAKIFY_KEYCLOAK_LOGIN_UI_COMMIT}.zip`,
+        url: `https://github.com/keycloakify/login-ui/archive/${KEYCLOAKIFY_LOGIN_UI_COMMIT}.zip`,
         cacheDirPath: pathJoin(getThisCodebaseRootDirPath(), "node_modules", ".cache", "scripts"),
         fetchOptions: getProxyFetchOptions({
             npmConfigGetCwd: getThisCodebaseRootDirPath()

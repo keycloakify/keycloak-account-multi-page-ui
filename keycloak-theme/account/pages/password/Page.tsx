@@ -1,6 +1,6 @@
 import { assert } from "tsafe/assert";
 import { useState } from "react";
-import { useKcClsx } from "@keycloakify/keycloak-account-multi-page-ui/useKcClsx";
+import { useKcClsx } from "@keycloakify/account-multi-page-ui/useKcClsx";
 import { useKcContext } from "../../KcContext";
 import { useI18n } from "../../i18n";
 import { Template } from "../../components/Template";

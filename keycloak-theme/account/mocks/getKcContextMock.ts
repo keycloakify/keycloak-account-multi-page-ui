@@ -1,4 +1,4 @@
-import { createGetKcContextMock } from "@keycloakify/keycloak-account-multi-page-ui/KcContext/getKcContextMock";
+import { createGetKcContextMock } from "@keycloakify/account-multi-page-ui/KcContext/getKcContextMock";
 import type { KcContextExtension, KcContextExtensionPerPage } from "../KcContext";
 import { themeNames, kcEnvDefaults } from "../../kc.gen";
 

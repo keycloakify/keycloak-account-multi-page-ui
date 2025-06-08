@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { clsx } from "@keycloakify/keycloak-account-multi-page-ui/tools/clsx";
-import { kcSanitize } from "@keycloakify/keycloak-account-multi-page-ui/kcSanitize";
-import { useSetClassName } from "@keycloakify/keycloak-account-multi-page-ui/tools/useSetClassName";
-import { useKcClsx } from "@keycloakify/keycloak-account-multi-page-ui/useKcClsx";
+import { clsx } from "@keycloakify/account-multi-page-ui/tools/clsx";
+import { kcSanitize } from "@keycloakify/account-multi-page-ui/kcSanitize";
+import { useSetClassName } from "@keycloakify/account-multi-page-ui/tools/useSetClassName";
+import { useKcClsx } from "@keycloakify/account-multi-page-ui/useKcClsx";
 import { useInitializeTemplate } from "./useInitializeTemplate";
 import { useI18n } from "../../i18n";
 import { useKcContext } from "../../KcContext";

@@ -1,10 +1,10 @@
 {
-    "name": "@keycloakify/keycloak-account-multi-page-ui",
+    "name": "@keycloakify/account-multi-page-ui",
     "version": "210102.0.16",
     "description": "React implementation of Keycloak Account Multi Page UI.",
     "repository": {
         "type": "git",
-        "url": "git://github.com/keycloakify/keycloak-account-multi-page-ui.git"
+        "url": "git://github.com/keycloakify/account-multi-page-ui.git"
     },
     "scripts": {
         "prepare": "tsx scripts/preprepare.ts && tsx scripts/prepare/main.ts",
